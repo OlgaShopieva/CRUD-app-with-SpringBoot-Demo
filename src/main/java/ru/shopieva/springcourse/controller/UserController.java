@@ -10,6 +10,7 @@ import ru.shopieva.springcourse.model.User;
 import ru.shopieva.springcourse.service.UserService;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller //помечаем что это слой, связывающий страницу браузера с нашим приложением (уже включ. в себя Component)
 public class UserController {
@@ -41,6 +42,17 @@ public class UserController {
     @GetMapping("user-delete/{id}")   //как в браузере передаётся id для удаления пользователя?
     public String deleteUser(@PathVariable("id") Long id){
         userService.deleteById(id);
+        return "redirect:/users";
+    }
+    @GetMapping("user-update/{id}")
+    public String updateUserForm(@PathVariable("id") Long id, Model model){
+        Optional<User> user = userService.findById(id);
+        model.addAttribute("user", user);
+        return "user-update";
+    }
+    @PostMapping("/user-update")
+    public String updateUser(User user){
+        userService.saveUser(user);
         return "redirect:/users";
     }
 }
