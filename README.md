@@ -1,7 +1,7 @@
 # CRUD application based on Spring Boot
 
 
-Simple CRUD app contains repository of users: id, first name, last name.
+Simple CRUD web app contains information about users: id, first name, last name.
 
 Functionality:
 1)  get all users
