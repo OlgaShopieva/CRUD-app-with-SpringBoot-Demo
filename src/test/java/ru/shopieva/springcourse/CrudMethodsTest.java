@@ -1,15 +1,14 @@
 package ru.shopieva.springcourse;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import ru.shopieva.springcourse.model.User;
 import ru.shopieva.springcourse.repository.UserRepository;
 import ru.shopieva.springcourse.service.UserService;
-
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -37,15 +36,44 @@ public class CrudMethodsTest {
     void testSaveUser(){
         UserRepository userRepository = mock(UserRepository.class);
 
-        User newUser = mock(User.class);
-        newUser.setFirstName("Ivan");
-        newUser.setLastName("Petrov");
+        User user = mock(User.class);
+        when(user.getFirstName()).thenReturn("Ivan");
+        when(user.getLastName()).thenReturn("Petrov");
+        when(user.getId()).thenReturn(1L);
 
-        when(userRepository.save(newUser)).thenReturn(newUser);
+        when(userRepository.save(user)).thenReturn(user);
 
         UserService userService = new UserService(userRepository);
 
-        assertEquals(userService.saveUser(newUser), userRepository.findById(1L));
+        assertEquals(userService.saveUser(user), Optional.of(user));
 
     }
+    @Test
+    void testUpdateUSer(){
+        UserRepository userRepository = mock(UserRepository.class);
+
+        User user = mock(User.class);
+        when(user.getFirstName()).thenReturn("Ivan");
+        when(user.getLastName()).thenReturn("Petrov");
+        when(user.getId()).thenReturn(1L);
+
+        when(userRepository.save(user)).thenReturn(user);
+
+        UserService userService = new UserService(userRepository);
+
+        assertEquals(userService.saveUser(user), Optional.of(user));
+
+    }
+
+        @Test
+        void testDeleteUserById() {
+            UserRepository userRepository = mock(UserRepository.class);
+            Long userId = 1L;
+
+            UserService userService = new UserService(userRepository);
+
+            userService.deleteById(userId);
+
+            Mockito.verify(userRepository, Mockito.times(1)).deleteById(userId);
+        }
 }
